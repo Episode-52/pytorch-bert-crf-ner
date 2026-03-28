@@ -4,6 +4,14 @@
 
 A PyTorch implementation of Korean NER Tagger based on BERT + CRF (PyTorch v1.2 / Python 3.x)  
 
+> ## 🚀 [Fork Update] Python 3.10 & Modern Environment Adaptation at 2026/03/26
+> **This Fork deeply refactors the original project and fixes critical bugs, resolving dependency conflicts and performance bottlenecks in newer environments:**
+> * **Full Support for Python 3.10**: Upgraded core frameworks to `torch==2.11.0+cpu`, `transformers==5.3.0`, and `tensorflow==2.12.0`,but if computer has a GPU, you can switch to the appropriate GPU version.
+> * **Fixed Critical CRF Library Conflicts**: Resolved the package confusion between `pytorch-crf` and `TorchCRF` in the original code. Corrected the import statement in `model/net.py` to `from torchcrf import CRF` and adapted it to the new API (`num_tags`).
+> * **Resolved Underlying C++ Errors**: Downgraded and pinned `sentencepiece` to `0.1.96`, completely fixing the `enable_sampling is True` error during KoBERT tokenization.
+> * **Massive Flask Performance Leap**: Refactored `app.py` by moving the model loading logic to the global scope (Global Initialization). The model now loads only once when the server starts, entirely eliminating lag, Out-Of-Memory (OOM) exceptions, and Bus Errors caused by per-request loading, achieving millisecond-level inference responses.
+
+
 ![kobert_crf_fig](./assets/kobert_crf_fig.png)
 
 ### Examples
@@ -126,7 +134,8 @@ pip install -r requirements.txt
 - [BERT CRF model file with validation](https://works.do/FhKyyNr)
 - [BERT CRF model file with training all dataset](https://works.do/xuweeF8)
 - [BERT CRF, BERT_alone sharing folder (including BiLSTM, BiGRU)](https://works.do/xkVee9n)
-
+- You can also download them in releases.
+  
 ### train
 ```bash
 python train_bert_crf.py 
@@ -136,6 +145,15 @@ python train_bert_crf.py
 ```bash
 python inference.py 
 ```
+
+### web demo
+```bash
+python app.py
+```
+
+### Result of web demo
+![BERT_NER_viz](./assets/bert_web_demo1.png)
+![BERT_NER_viz](./assets/bert_web_demo2.png)
 
 ### Visualization
 ![BERT_NER_viz](./assets/kobert_ner_11_layer_viz.gif)

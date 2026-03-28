@@ -5,7 +5,7 @@ from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 from kobert.pytorch_kobert import get_pytorch_kobert_model
 from transformers import BertModel, BertConfig
 # from pytorch_pretrained_bert import BertModel, BertConfig
-from TorchCRF import CRF
+from torchcrf import CRF
 
 bert_config = {'attention_probs_dropout_prob': 0.1,
                  'hidden_act': 'gelu',
@@ -66,7 +66,7 @@ class KobertCRFViz(nn.Module):
 
         self.dropout = nn.Dropout(config.dropout)
         self.position_wise_ff = nn.Linear(config.hidden_size, num_classes)
-        self.crf = CRF(num_labels=num_classes)
+        self.crf = CRF(num_tags=num_classes, batch_first=True)
 
     def forward(self, input_ids, token_type_ids=None, tags=None):
         attention_mask = input_ids.ne(self.vocab.token_to_idx[self.vocab.padding_token]).float()
